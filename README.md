@@ -53,21 +53,21 @@ I've already touched on some of these but here are some quick set up strategies:
 
 ## I DONT HAVE ENOUGH CASH, I WANT CASH TO SCALE MY BOTS, REINVEST ELSEWHERE, OR FOR PERSONAL USE
 
-PROFIT_GOAL: .01-.05
-SAFETY_ORDER_PERCENT: .01-.1 (I recommend either matching or doubling your PROFIT_GOAL for this variable. Stay prepared for big corrections so dont make this number too small)
+PROFIT_GOAL: .01-.05  
+SAFETY_ORDER_PERCENT: .01-.1 (I recommend either matching or doubling your PROFIT_GOAL for this variable. Stay prepared for big corrections so dont make this number too small)  
 TAKE_PROFIT_IN_CRYPTO_PERCENT: 0 (duh you want cash)
 
 ## I LIKE CRYPTO BUT I ALSO WANT CASH TO REINVEST OTHER PLACES OR TO USE PERSONALLY
 
-PROFIT_GOAL: .01-.05
-SAFETY_ORDER_PERCENT: 0.1-.1
-TAKE_PROFIT_IN_CRYPTO_PERCENT: .5
+PROFIT_GOAL: .01-.05  
+SAFETY_ORDER_PERCENT: 0.1-.1  
+TAKE_PROFIT_IN_CRYPTO_PERCENT: .5  
 
 ## I ONLY WANT CRYPTO GIVE ME ALL THE CRYPTO
 
-PROFIT_GOAL: .01-.05
-SAFETY_ORDER_PERCENT: 0.1-.1
-TAKE_PROFIT_IN_CRYPTO_PERCENT: 1
+PROFIT_GOAL: .01-.05  
+SAFETY_ORDER_PERCENT: 0.1-.1  
+TAKE_PROFIT_IN_CRYPTO_PERCENT: 1  
 
 
 
