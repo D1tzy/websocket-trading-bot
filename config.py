@@ -45,5 +45,5 @@ TAKE_PROFIT_IN_CRYPTO_PERCENT = .5
 
 # Input your API keys here
 # Make sure not to get them switched up
-API_KEY = "nKw295C4ezFs5X5QnDNy4jjgIveKQRzHt8Q0LUQz1RIc5maRn8D3mH7mcpHTswzU"
-API_SECRET_KEY = "Hi7UHXFVZLSDb9pfzyKwLwkj9R5FNyJv8UHRfmymMZsjC6Pg3FIHYDn6WRtLgSZr"
+API_KEY = ""
+API_SECRET_KEY = ""

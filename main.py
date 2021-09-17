@@ -1,7 +1,8 @@
 import websocket, json, pandas as pd
-import config, calculate_trade as calculateTrade
+import calculate_trade as calculateTrade
 from binance.client import Client
 from binance.enums import *
+import config
 
 binance_url = config.BINANCE_WS_STREAM
 currency = config.PAIR_TO_TRADE
