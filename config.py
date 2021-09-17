@@ -23,10 +23,10 @@ PAIR_TO_TRADE = "btcusdt"
 
 # Dollar amount to be used per trade
 # Default: $20
-DOLLAR_AMOUNT = 25
+DOLLAR_AMOUNT = 20
 
 # Percent profit goal per trade
-# Default: 50%
+# Default: 1%
 PROFIT_GOAL = .01
 
 # Percent the bot will place the next limit order below last filled price
