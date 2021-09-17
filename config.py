@@ -41,7 +41,7 @@ SAFETY_ORDER_PERCENT = .01
 # Lets say your 'dollar_profit_amount' for the trade is $1
 # If this is set to 50%, the bot will keep $0.5 of the crypto at the current rates and sell the rest
 # Default: 50%
-TAKE_PROFIT_IN_CRYPTO_PERCENT = .5
+TAKE_PROFIT_IN_CRYPTO_PERCENT = .4
 
 # Input your API keys here
 # Make sure not to get them switched up
