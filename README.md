@@ -42,6 +42,11 @@ profit in crypto. Others may believe firmly that cash is trash and want 100% pro
 Regardless, I set this variable up to give flexibility to you, have fun with it. 
 
 
+# What is my country's tld
+
+When you go to log on to Binance, if you type binance.com, the tld is just com. Conversely, if you type anything besides 'com' then that is your tld.
+For people in the US, its 'us', for Japan, its 'jp'. It is up to you to 
+know if this is required for your region.
 
 
 # STRATEGY IDEAS
