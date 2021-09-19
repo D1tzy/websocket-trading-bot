@@ -1,5 +1,5 @@
 import websocket, json, pandas as pd
-import calculate_trade as calculateTrade
+import calculate_trade 
 from binance.client import Client
 from binance.enums import *
 import config
@@ -10,6 +10,7 @@ currency = config.PAIR_TO_TRADE
 successful_trades = 0
 lifetime_profit = 0
 lifetime_crypto_profit = 0
+below_max_value = False
 
 active_trades = pd.DataFrame(columns = ['purchase_price', 
                                         'target_price', 
@@ -22,23 +23,31 @@ active_trades = pd.DataFrame(columns = ['purchase_price',
 client = Client(config.API_KEY, config.API_SECRET_KEY, tld=config.tld)
 
 info = client.get_symbol_info(config.PAIR_TO_TRADE)
-asset_precision = info['quoteAssetPrecision']
+asset_precision = float(info['quoteAssetPrecision']) + 1
 
 
 ############# ORDER FUNCTIONS ###############
 
 def new_trade(trade, price):
-    create_order(SIDE_BUY, float(f"{{:{asset_precision + 1}f}}".format(trade['amount_purchased'])), price)
+    if trade['next_buy_price'] > config.LOWEST_BUY_PRICE:
+        create_order(SIDE_BUY, float(f"{{:{asset_precision}f}}".format(trade['amount_purchased'])), price)
 
-    create_order(SIDE_BUY, float(f"{{:{asset_precision + 1}f}}".format(trade['next_buy_amount'])), trade['next_buy_price'])
+        create_order(SIDE_BUY, float(f"{{:{asset_precision}f}}".format(trade['next_buy_amount'])), trade['next_buy_price'])
 
-    create_order(SIDE_SELL, float(f"{{:{asset_precision + 1}f}}".format(trade['crypto_sell_amount'])), trade['target_price'])
-
+        create_order(SIDE_SELL, float(f"{{:{asset_precision}f}}".format(trade['crypto_sell_amount'])), trade['target_price'])
+    else:
+        print("Next buy price lower than LOWEST_BUY_PRICE, please change your settings.")
+        ws.close()
 
 def safety_trade(trade):
-    create_order(SIDE_BUY, trade['next_buy_amount'], trade['next_buy_price'])
+    global below_max_value
+    if trade['next_buy_price'] > config.LOWEST_BUY_PRICE:
+        create_order(SIDE_BUY, trade['next_buy_amount'], trade['next_buy_price'])
 
-    create_order(SIDE_SELL, trade['crypto_sell_amount'], trade['target_price'])
+        create_order(SIDE_SELL, trade['crypto_sell_amount'], trade['target_price'])
+    else:
+        print("Lowest buy in price hit!")
+        below_max_value = True
 
 
 def create_order(side, quantity, price):
@@ -74,14 +83,14 @@ def on_error(ws, event):
 
 
 def run(ws, message):
-    global active_trades, successful_trades, lifetime_profit, lifetime_crypto_profit
+    global active_trades, successful_trades, lifetime_profit, lifetime_crypto_profit, below_max_value
 
     message = json.loads(message)
 
     if len(active_trades) == 0:
         price = float(message['a'])
         
-        trade = calculateTrade.calculateTrade(price)
+        trade = calculate_trade.calculateTrade(price)
 
         active_trades = active_trades.append({'purchase_price': trade['purchase_price'], 
                                                 'target_price': trade['target_price'], 
@@ -101,8 +110,8 @@ def run(ws, message):
         print(active_trades.iloc[-1])   
 
 
-    if float(message['a']) < active_trades.iloc[-1]['next_buy_price']:
-        trade = calculateTrade.calculateTrade(active_trades.iloc[-1]['next_buy_price'])
+    if float(message['a']) < active_trades.iloc[-1]['next_buy_price'] and below_max_value == False:
+        trade = calculate_trade.calculateTrade(active_trades.iloc[-1]['next_buy_price'])
 
         active_trades = active_trades.append({'purchase_price': trade['purchase_price'], 
                                                 'target_price': trade['target_price'], 
@@ -149,6 +158,8 @@ def run(ws, message):
         else:
             print('Active trades:')
             print(active_trades)
+
+        below_max_value = False
 
         
 

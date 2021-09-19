@@ -13,7 +13,7 @@ YES!
 
 As you can tell, the bot buys regardless of trend. My thought process behind why this bot may outperform many quantitative trading models is that it sacrifices
 capital efficiency in order to capitalize on the voaltile nature of the crypto markets. Essentially, this first version of my bot cures the *retail fallacy* 
-of buying high and selling low by essentially admitting that no one can *time* the market, one can only hope to profit on the fluctuations. 
+of buying high and selling low by essentially admitting that no one can *time* the market, one can only hope to profit on the fluctuations. It is also worth noting that there is an **ASSET_PRECISION** variable for every crypto traded on Binance. This limits how many decimal places an order can have. This limits how close to your **DOLLAR_AMOUNT** the bot is able to get with the actual order. This also causes **lifetime_profit** to become slightly inaccurate over long periods of time. Only refer to your official Binance data to calculate taxes. 
 
 In essence, this bought will always buy low sell high, because **THERE IS NO STOP LOSS**. Although, at the same time, it is also ALWAYS buying the top. Therefore, 
 in practice, this script could lose CLOSE TO ALL of your money if the crypto you have it is set to trade crashes 90%+ and your **SAFETY_ORDER_PERCENT** is 

@@ -5,7 +5,7 @@ def calculateTrade(exchange_price):
     target_price = exchange_price + (exchange_price * config.PROFIT_GOAL)
     next_buy_price = exchange_price - (exchange_price * config.SAFETY_ORDER_PERCENT)
     dollar_profit = config.DOLLAR_AMOUNT * config.PROFIT_GOAL
-    crypto_sell_amount = amount_purchased - (dollar_profit / exchange_price)
+    crypto_sell_amount = amount_purchased - ((dollar_profit * config.TAKE_PROFIT_IN_CRYPTO_PERCENT) / exchange_price)
     crypto_saved = amount_purchased - crypto_sell_amount
     next_buy_amount = config.DOLLAR_AMOUNT / next_buy_price
 

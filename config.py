@@ -4,7 +4,10 @@
 # Some countries still require a regional tld, such as Japan
 # It is up to you to figure out if this is required for your region
 ####################################################################
-
+try:
+    import local
+except:
+    None
 
 tld = 'us'
 
@@ -43,7 +46,11 @@ SAFETY_ORDER_PERCENT = .01
 # Default: 50%
 TAKE_PROFIT_IN_CRYPTO_PERCENT = .5
 
-# Input your API keys here
+# Lowest crypto price your bot will buy at
+# Default: $45000
+LOWEST_BUY_PRICE = 45000
+
+# Change these values to your API keys
 # Make sure not to get them switched up
-API_KEY = ""
-API_SECRET_KEY = ""
+API_KEY = local.API_KEY
+API_SECRET_KEY = local.API_SECRET_KEY
