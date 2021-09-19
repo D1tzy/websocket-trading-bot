@@ -1,13 +1,14 @@
+try:
+    import local
+except:
+    None
+
 ####################################################################
 # IF YOU ARE NOT FROM THE US
 # set tld to 'com' below
 # Some countries still require a regional tld, such as Japan
 # It is up to you to figure out if this is required for your region
 ####################################################################
-try:
-    import local
-except:
-    None
 
 tld = 'us'
 
