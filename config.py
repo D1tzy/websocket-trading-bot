@@ -47,9 +47,11 @@ SAFETY_ORDER_PERCENT = .01
 # Default: 50%
 TAKE_PROFIT_IN_CRYPTO_PERCENT = .5
 
-# Lowest crypto price your bot will buy at
-# Default: $45000
-LOWEST_BUY_PRICE = 45000
+# Maximum active trades your bot will have open at a time
+# Use this value as a pseudo stop-loss to prevent your bot from buying every
+# dip in the event of a major crash or correction
+# Default: 20 trades
+MAX_ACTIVE_TRADES = 20
 
 # Change these values to your API keys
 # Make sure not to get them switched up
