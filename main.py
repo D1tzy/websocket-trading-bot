@@ -9,15 +9,14 @@ currency = config.PAIR_TO_TRADE
 successful_trades = 0
 lifetime_profit = 0
 lifetime_crypto_profit = 0
-at_max_trades = False
 
 active_trades = pd.DataFrame()
 
 client = Client(config.API_KEY, config.API_SECRET_KEY, tld=config.tld)
 
 info = client.get_symbol_info(currency)
-print(info)
-asset_precision = float(info['quoteAssetPrecision']) + 1
+#print(info)
+asset_precision = float(info['quoteAssetPrecision'])
 
 
 ############# ORDER FUNCTIONS ###############
@@ -80,17 +79,14 @@ def on_error(ws, event):
 
 
 def run(ws, message):
-    global active_trades, successful_trades, lifetime_profit, lifetime_crypto_profit, at_max_trades
-
-    if (len(active_trades) == config.MAX_ACTIVE_TRADES):
-        at_max_trades = True
+    global active_trades, successful_trades, lifetime_profit, lifetime_crypto_profit
 
     message = json.loads(message)
 
     best_ask = float(message['a'])
 
     if len(active_trades) == 0:
-        trade = calculate_trade.calculateTrade(best_ask)
+        trade = calculate_trade.calculateTrade(best_ask, asset_precision)
 
         active_trades = active_trades.append(trade, ignore_index = True)
         
@@ -101,7 +97,7 @@ def run(ws, message):
 
 
     if best_ask < active_trades.iloc[-1]['next_buy_price'] and len(active_trades) < config.MAX_ACTIVE_TRADES:
-        trade = calculate_trade.calculateTrade(active_trades.iloc[-1]['next_buy_price'])
+        trade = calculate_trade.calculateTrade(active_trades.iloc[-1]['next_buy_price'], asset_precision)
 
         active_trades = active_trades.append(trade, ignore_index = True)
 
@@ -136,12 +132,12 @@ def run(ws, message):
 
         active_trades = active_trades.drop([len(active_trades) - 1])
 
-        at_max_trades == False
-
         if len(active_trades) == 0:
             print('All trades completed!')
             print('Starting new trade:')
         else:
+            print('Placing buy order for safety order')
+            create_order(SIDE_BUY, active_trades.iloc[-1]['next_buy_amount'], active_trades.iloc[-1]['next_buy_price'])
             print('Active trades:')
             print(active_trades)        
 
@@ -153,5 +149,5 @@ ws = websocket.WebSocketApp(f"{binance_url}{currency}@ticker",
                             on_message=run,
                             on_error=on_error)
 
-#ws.run_forever()
+ws.run_forever()
 
