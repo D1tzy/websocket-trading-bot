@@ -16,7 +16,7 @@ client = Client(config.API_KEY, config.API_SECRET_KEY, tld=config.tld)
 
 info = client.get_symbol_info(currency)
 #print(info)
-asset_precision = float(info['quoteAssetPrecision'])
+asset_precision = int(info['quoteAssetPrecision'])
 
 
 ############# ORDER FUNCTIONS ###############
@@ -149,5 +149,5 @@ ws = websocket.WebSocketApp(f"{binance_url}{currency}@ticker",
                             on_message=run,
                             on_error=on_error)
 
-ws.run_forever()
+ws.run_forever(ping_interval=200)
 
