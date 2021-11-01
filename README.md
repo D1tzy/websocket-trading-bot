@@ -2,122 +2,19 @@
 
 ## How does it work?
 
-As soon as the bot turns on, it will attempt to get a fill at market value. The trade information will be calculated and put into a pandas dataframe, to help the 
-bot keep track of buy and sell levels as well as the amount to buy or sell. If the price dips more than defined by **'SAFETY_ORDER_PERCENT'** in config.py, the
-the next buy will have been filled, so the bot will place the newly bought crypto for sale at the price defined by **'PROFIT_GOAL'**, and a new LIMIT order for
-the price below **SAFETY_ORDER_PERCENT**.
+In the config.py folder you will find some config variables. 'DOLLAR_AMOUNT' is the easiest variable, its how many dollars on every trade it will put in. Note this assumes you are using USD or some USD stablecoin. Adjust your amount if you are using a different base currency. 'SAFETY_ORDER_PERCENT' is the percent below last filled price the bot will place a new order. The default value for this variable is .01 (1%), therefore buying every 1% dip, but can be changed to fit any strategy. Every buy order filled is considered a new position, and a corresponding sell order 'PROFIT_GOAL'% above the filled price is placed. There is another variable called 'TAKE_PROFIT_IN_CRYPTO_PERCENT' that allows you to keep some of your profit in the crypto it is trading. For example, if before you sell every position is up $4, and TAKE_PROFIT_IN_CRYPTO_PERCENT is set to .25 (25%) then it will keep $1 in the crypto allowing for future appreciation while simultaneously profiting you in fiat/stablecoins/whatever base crypto you are using as a pairing.
 
-## Is it risky>
+This bot looks to capitalize on volatility and does not operate with any stop loss feature. As a safety feature, there is a 'MAX_ACTIVE_TRADES' variable that allows you to limit how many open trades the bot can have. You can set this value to infinity, or some insanely high number, but please keep in mind the bot also does not cancel orders once theyve been placed. This is a problem as most exchanges have a max open orders allowed, so eventually you'd be blocked by your exchange from placing more orders. 
 
-YES!
+You can change the crypto pair you are trading using the 'PAIR_TO_TRADE' variable. Input the pairing all lowercase, no special characters, no spaces. If you aren't from the us and not using binance.us, you will need to change the 'tld' variable to 'com' or your country's tld. For example Japan has a special tld, 'jp'.
 
-As you can tell, the bot buys regardless of trend. My thought process behind why this bot may outperform many quantitative trading models is that it sacrifices
-capital efficiency in order to capitalize on the voaltile nature of the crypto markets. Essentially, this first version of my bot cures the *retail fallacy* 
-of buying high and selling low by essentially admitting that no one can *time* the market, one can only hope to profit on the fluctuations. It is also worth noting that there is an **ASSET_PRECISION** variable for every crypto traded on Binance. This limits how many decimal places an order can have. This limits how close to your **DOLLAR_AMOUNT** the bot is able to get with the actual order. This also causes **lifetime_profit** to become slightly inaccurate over long periods of time. Only refer to your official Binance data to calculate taxes. 
+## How do you plan to improve this repository
 
-In essence, this bought will always buy low sell high, because **THERE IS NO STOP LOSS**. Although, at the same time, it is also ALWAYS buying the top. Therefore, 
-in practice, this script could lose CLOSE TO ALL of your money if the crypto you have it is set to trade crashes 90%+ and your **SAFETY_ORDER_PERCENT** is 
-too low compared to your **DOLLAR_AMOUNT** and how much capital you have allocated in total. 
+One possible way to improve the strategy would be to apply technical indicators and only buy in uptrends or at reversals and then possibly to operate with a stop loss to ensure you're using as much capital on these trades. Another way would be to apply support and resistance levels and buy in the support area and then sell out and stop buying when it approaches the resistance area. 
 
-To put it simply remember this. If you have $200 allocated to this bot, and your dollar amount is $20, and your safety order percent is set to .01 (1%), if the
-crypto drops just 10% the script will be stuck, and wont be able to execute any more trades. And also you may have just used all your capital buying
-the top 10% of a 95%+ crash. Scary thought.
+However, my theory is that getting too fancy trying to beat the market will only burn you in the long run. I personally really like this script the way it is, however, I do plan to bring more strategies and features to this bot. I plan to bring a front end in using react to display performance metrics and allow you to change config.py settings in real time, stop loss active trades, and an option to redeem all or a portion of your crypto profit saved up. I also need to apply canceling orders that were never filled, and to cancel sell orders when the active trades gets too close to the max orders allowed by the exchange so that we don't get blocked from placing orders.
 
-## What is 'take_profit_in_crypto_percent'?
+## Is it profitable?
 
-Whenever a trade is executed, that amount of profit will be kept in the crypto traded at current prices
+I plan to run this script in my IRA account, so every trade will be tax free. Coupled with low trading fees, this bot should absolutely remain profitable. The only way it wouldn't be would be if the crypto it's trading crashed and never recovered. That's why I only plan to run it on things like Bitcoin, Ethereum, Cardano, Chainlink, that have been around awhile and very likely have a big future in the world. On top of that, the ones I've listed are all fixed in supply, meaning every trade I profit more of a finite asset that I can then hold and allow to appreciate. 
 
-For example:
-
-Lets say your dollar amount is $100, and your target profit is 1%. Your total profit on the trade would be $1. If you leave this variable at its default
-value of 50% (.5), then $0.50 will be kept in the crypto for you to keep and sell at your disgression. 
-
-The purpose of this variable is two-fold. First, every sell order executed is a taxable event. Keeping some of your profit in the asset alleviates the tax burden
-by not realizing profit, but more on how to get around this entirely late. Second, this allows individuals to accumulate an appreciating asset at essentially no 
-true cost to them. For all you stock market geeks out there, think of this as reinvesting dividends but with less steps because you're not even reinvesting, 
-you're just keeping what you own and trading it up.
-
-Feel free to use this variable at your disgression. Some of you may want to take profit 100% in cash in order to scale the bot, and then eventually start taking
-profit in crypto. Others may believe firmly that cash is trash and want 100% profit in crypto, and just sell enough crypto to cover the initial buy in. 
-Regardless, I set this variable up to give flexibility to you, have fun with it. 
-
-
-# What is my country's tld
-
-When you go to log on to Binance, if you type binance.com, the tld is just com. Conversely, if you type anything besides 'com' then that is your tld.
-For people in the US, its 'us', for Japan, its 'jp'. It is up to you to 
-know if this is required for your region.
-
-
-# STRATEGY IDEAS
-
-I've already touched on some of these but here are some quick set up strategies:
-
-# PICK YOUR PAIR_TO_TRADE AT YOUR DISGRESSION. THE MORE VOLATILE THE MORE TRADES THAT WILL BE SUCCESSFUL BUT ALSO MORE RISK
-# I STRONGLY RECOMMEND PICKING ANY CRYPTO IN THE TOP 10 BY MARKET CAP IF YOU ARE UNSURE OF WHAT MAKES A GOOD CRYPTO PROJECT
-
-## I DONT HAVE ENOUGH CASH, I WANT CASH TO SCALE MY BOTS, REINVEST ELSEWHERE, OR FOR PERSONAL USE
-
-PROFIT_GOAL: .01-.05  
-SAFETY_ORDER_PERCENT: .01-.1 (I recommend either matching or doubling your PROFIT_GOAL for this variable. Stay prepared for big corrections so dont make this number too small)  
-TAKE_PROFIT_IN_CRYPTO_PERCENT: 0 (duh you want cash)
-
-## I LIKE CRYPTO BUT I ALSO WANT CASH TO REINVEST OTHER PLACES OR TO USE PERSONALLY
-
-PROFIT_GOAL: .01-.05  
-SAFETY_ORDER_PERCENT: 0.1-.1  
-TAKE_PROFIT_IN_CRYPTO_PERCENT: .5  
-
-## I ONLY WANT CRYPTO GIVE ME ALL THE CRYPTO
-
-PROFIT_GOAL: .01-.05  
-SAFETY_ORDER_PERCENT: 0.1-.1  
-TAKE_PROFIT_IN_CRYPTO_PERCENT: 1  
-
-
-
-As you can see, the only difference between each strategy is the **TAKE_PROFIT_IN_CRYPTO_PERCENT**. After watching a similar bot work for a couple months,
-I've found (personally) that it doesn't make much of a difference how high you set your profit goal, in fact it could hurt you if you set it too high, and 
-an order just barely doesn't get filled. The only thing to be sure of is that every trade's profit is MORE than: (total profit - crypto take profit) - taxes - trading fees. 
-
-This would be a lot easier to calculate if taxes didnt exist, so lets make them disappear.
-
-
-
-# The Self-Directed Roth Ira
-
-This financial instrument could potentially save you hundreds of thousands in taxes by retirement. By contributing to this account, and letting this script
-trade with the cash in that account, every trade will be tax free, AND when you go to take it out at retirement, THOSE earnings are tax free too. Therefore,
-all you need to worry about is being more profitable than the trading fees, allowing you to work profitably with much lower capital - ALTHOUGH YOU WILL NOT
-HAVE ACCESS TO THIS MONEY OUTSIDE OF THIS ACCOUNT UNTIL THE AGE OF 65 OR OVER WITHOUT INCURRING POSSIBLY VERY STEEP EARLY WITHDRAWAL FEES.
-
-HOWEVER. The cash profit in this account can easily be reinvested into the stock market, forex markets, and a very large array of alternative investments, as allowed
-by the US government. This gives the user the ability to easily re-balance their portfolio after allowing the script to build up some capital without being 
-punished by taxes or huge transfer fees.
-
-
-
-# FUTURE GOALS FOR THE BOT
-
-As the code stands, you COULD run multiple scripts for multiple crypto pairs. However, as more scripts get added and more orders go into the order book, eventually
-the exchange doesnt allow you to have any more orders, and with the dataframes for each crypto across multiple scripts, it would be difficult to define which
-order(s) make the most sense to delete. To fix this issue, I plan to integrate multi-crypto trading functionality in a single script, (hopefully) up to 5 or more at a 
-time, to allow the user to trade multiple pairs without having to run multiple instances simultaneously. 
-
-I also hope to integrate smart downside protection, to protect capital already invested, and to mitigate the downside of always buying the top. To implement this,
-I dont plan to actually 'short' the crypto, as there are added fees and risk to that. Instead, I'll simply have the bot sell a portion of what is already owned,
-and place an order to buy it back lower. I think that the short side trades will be implemented with a stop loss, so that we lose out on cash not crypto, however
-maybe I'll implement a boolean value to toggle the stop loss on or off. Possibly one for the whole feature, for those people who dont believe in selling crypto.
-
-Eventually I also hope to bring in stock market and forex market options using this strategy, as I think it could work very well in those markets as well if 
-implemented properly. Then I'll give the user the ability to select multiple assets across multiple markets to trade using this strategy in the config.py.
-
-Then, once I have all the data from all the markets, I'll probably begin to host a database for the repo to hold my own data and build out an api for the 
-instances to retrieve data from. The databases will also hold the users accounts info for each instance, opening the door for things like margin trading, 
-which would be extremely useful for the next step when we apply machine learning models to change the dollar amount per trade depending on market conditions.
-
-And finally, I hope to add some machine learning models to the bot to dynamically change the amount bought or sold depending on its confidence that the
-trade will be successful. Hopefully this will result in the bot putting more money into trades that are successful quicker, and less money into ones that arent
-successful for days or weeks. Going along with these models, if the bot is EXTREMELY confident, it could even use some margin to try and amplify those gains even
-more in a quick timeframe. It would probably be smart to have a tight stop loss to take the margin out early as well, but then leave the rest of the position
-as the trade.
