@@ -9,16 +9,18 @@ currency = config.PAIR_TO_TRADE
 successful_trades = 0
 lifetime_profit = 0
 lifetime_crypto_profit = 0
+order_id = 1
 
 active_trades = pd.DataFrame()
 
 client = Client(config.API_KEY, config.API_SECRET_KEY, tld=config.tld)
 
 info = client.get_symbol_info(currency)
-#print(info)
+
 asset_precision = int(info['quoteAssetPrecision'])
 
-
+# TO DO: Add order cancelation feature using order_id global variable
+# Make it keep track of order ID's in the dataframe, remember to replace deleted sell orders
 ############# ORDER FUNCTIONS ###############
 
 def new_trade(trade):
@@ -33,7 +35,6 @@ def safety_trade(trade):
 
     create_order(SIDE_SELL, trade['crypto_sell_amount'], trade['target_price'])
 
-
 def create_order(side, quantity, price):
     print('trying')
     try:
@@ -43,15 +44,17 @@ def create_order(side, quantity, price):
             type = ORDER_TYPE_LIMIT,
             timeInForce = TIME_IN_FORCE_GTC,
             price = price,
-            quantity = quantity
+            quantity = quantity,
+            #newClientOrderId = order_id
         )
 
         print("Order created:")
         print(order)
+        #order_id = order_id + 1
     except Exception as e:
         print(e)
         print(quantity)
-        #ws.close()
+
 
 def market_order(quantity):
     try: client.create_test_order(
@@ -79,7 +82,7 @@ def on_error(ws, event):
 
 
 def run(ws, message):
-    global active_trades, successful_trades, lifetime_profit, lifetime_crypto_profit
+    global active_trades, successful_trades, lifetime_profit, lifetime_crypto_profit, order_id
 
     message = json.loads(message)
 
@@ -149,5 +152,6 @@ ws = websocket.WebSocketApp(f"{binance_url}{currency}@ticker",
                             on_message=run,
                             on_error=on_error)
 
+# Set a ping interval so we dont get disconnected
 ws.run_forever(ping_interval=200)
 

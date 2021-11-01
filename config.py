@@ -27,18 +27,18 @@ PAIR_TO_TRADE = "btcusdt"
 
 # Dollar amount to be used per trade
 # Default: $20
-DOLLAR_AMOUNT = 100
+DOLLAR_AMOUNT = 20
 
 # Percent profit goal per trade
 # Default: 1%
-PROFIT_GOAL = .0001
+PROFIT_GOAL = .01
 
 # Percent the bot will place the next limit order below last filled price
 # For example: 
 # Last trade price is 50000. A safety order percent of 1% would mean the bot places the order at 49,500
 # If that order gets filled, the bot places a new limit order 1% below that, so 49005, etc
 # Default: 1%
-SAFETY_ORDER_PERCENT = .0001
+SAFETY_ORDER_PERCENT = .01
 
 # Percentage of profit to be kept in crypto
 # For example:

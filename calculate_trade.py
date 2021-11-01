@@ -33,4 +33,5 @@ def calculateTrade(exchange_price, precision):
         "next_buy_amount": next_buy_amount
     }
 
+    # Returms a dataframe of the dictionary above
     return pd.Series(data)
